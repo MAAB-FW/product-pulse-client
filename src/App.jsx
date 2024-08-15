@@ -10,7 +10,6 @@ function App() {
                 <Outlet></Outlet>
             </div>
             <div className="bg-gray-900">
-
                 <Footer></Footer>
             </div>
         </div>

@@ -1,16 +1,29 @@
 import Card from "@/components/Card";
+import Pagination from "@/components/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 
 const Home = () => {
+    const [currentPage, setCurrentPage] = useState(0);
+    const itemPerPage = 9;
+
     const { data: products } = useQuery({
-        queryKey: ["products"],
+        queryKey: ["products", currentPage],
         queryFn: async () => {
-            const res = await axios(`${import.meta.env.VITE_BASE_URL}/products`);
+            const res = await axios(`${import.meta.env.VITE_BASE_URL}/products?size=${itemPerPage}&page=${currentPage}`);
             return res.data;
         },
     });
+    const { data } = useQuery({
+        queryKey: ["count", currentPage],
+        queryFn: async () => {
+            const res = await axios(`${import.meta.env.VITE_BASE_URL}/count`);
+            return res.data;
+        },
+        initialData: {},
+    });
+    const { count } = data;
     return (
         <div>
             <div className="flex w-[83%] mx-auto items-center justify-center bg-white rounded-lg overflow-hidden pl-4 shadow-md h-10">
@@ -32,6 +45,12 @@ const Home = () => {
                     <Card key={product.image} product={product}></Card>
                 ))}
             </div>
+            <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                count={count}
+                itemPerPage={itemPerPage}
+            ></Pagination>
         </div>
     );
 };

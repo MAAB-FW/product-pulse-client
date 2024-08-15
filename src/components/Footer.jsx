@@ -16,7 +16,7 @@ const Footer = () => {
                 <div className="lg:flex lg:items-center">
                     <ul className="flex space-x-6">
                         <li>
-                            <a href="javascript:void(0)">
+                            <a href="">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="fill-gray-300 hover:fill-white w-7 h-7"
@@ -31,7 +31,7 @@ const Footer = () => {
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:void(0)">
+                            <a href="">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="fill-gray-300 hover:fill-white w-7 h-7"
@@ -46,7 +46,7 @@ const Footer = () => {
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:void(0)">
+                            <a href="">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
@@ -64,17 +64,17 @@ const Footer = () => {
                     <h4 className="text-lg font-semibold mb-6 text-white">Contact Us</h4>
                     <ul className="space-y-4">
                         <li>
-                            <a href="javascript:void(0)" className="text-gray-300 hover:text-white text-sm">
+                            <a href="" className="text-gray-300 hover:text-white text-sm">
                                 Email
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:void(0)" className="text-gray-300 hover:text-white text-sm">
+                            <a href="" className="text-gray-300 hover:text-white text-sm">
                                 Phone
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:void(0)" className="text-gray-300 hover:text-white text-sm">
+                            <a href="" className="text-gray-300 hover:text-white text-sm">
                                 Address
                             </a>
                         </li>
@@ -85,17 +85,17 @@ const Footer = () => {
                     <h4 className="text-lg font-semibold mb-6 text-white">Information</h4>
                     <ul className="space-y-4">
                         <li>
-                            <a href="javascript:void(0)" className="text-gray-300 hover:text-white text-sm">
+                            <a href="" className="text-gray-300 hover:text-white text-sm">
                                 About Us
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:void(0)" className="text-gray-300 hover:text-white text-sm">
+                            <a href="" className="text-gray-300 hover:text-white text-sm">
                                 Terms &amp; Conditions
                             </a>
                         </li>
                         <li>
-                            <a href="javascript:void(0)" className="text-gray-300 hover:text-white text-sm">
+                            <a href="" className="text-gray-300 hover:text-white text-sm">
                                 Privacy Policy
                             </a>
                         </li>
