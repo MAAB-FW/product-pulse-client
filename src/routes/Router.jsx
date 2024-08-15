@@ -5,6 +5,7 @@ import Register from "@/pages/Register";
 import ContactUs from "@/pages/ContactUs";
 import About from "@/pages/About";
 import PrivateRoute from "./PrivateRoute";
+import Home from "@/pages/Home";
 
 export const router = createBrowserRouter([
     {
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
             </PrivateRoute>
         ),
         children: [
+            {
+                path: "/",
+                element: <Home></Home>,
+            },
             {
                 path: "/contactUs",
                 element: (
