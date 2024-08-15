@@ -1,9 +1,12 @@
 import SocialLogin from "@/components/SocialLogin";
+import useAuth from "@/hooks/useAuth";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
-    const handleRegister = async (e) => {
+    const { signUp, updateUser } = useAuth();
+    const navigate = useNavigate();
+    const handleRegister = (e) => {
         e.preventDefault();
         const form = e.target;
         const name = form.name.value;
@@ -17,6 +20,22 @@ const Register = () => {
             password,
         };
         console.log(userInfo);
+        signUp(email, password)
+            .then((res) => {
+                console.log(res.user);
+                if (res.user) {
+                    updateUser(name, photo)
+                        .then(() => {
+                            navigate("/");
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
     return (
         <div className="container mx-auto min-h-screen flex items-center">
@@ -53,7 +72,7 @@ const Register = () => {
                     />
                     {/* <p className="text-right text-sm text-gray-500 underline cursor-pointer hover:text-black">Forgot Password?</p> */}
                     <button type="submit" className="bg-teal-600 text-white rounded-full p-3 shadow-md active:shadow-none">
-                        Log in
+                        Register
                     </button>
                 </form>
                 <p className="text-xs text-gray-500">
