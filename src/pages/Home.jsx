@@ -5,20 +5,23 @@ import axios from "axios";
 import React, { useState } from "react";
 
 const Home = () => {
+    const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const itemPerPage = 9;
 
     const { data: products } = useQuery({
-        queryKey: ["products", currentPage],
+        queryKey: ["products", currentPage, search],
         queryFn: async () => {
-            const res = await axios(`${import.meta.env.VITE_BASE_URL}/products?size=${itemPerPage}&page=${currentPage}`);
+            const res = await axios(
+                `${import.meta.env.VITE_BASE_URL}/products?size=${itemPerPage}&page=${currentPage}&search=${search}`,
+            );
             return res.data;
         },
     });
     const { data } = useQuery({
-        queryKey: ["count", currentPage],
+        queryKey: ["count", currentPage, search],
         queryFn: async () => {
-            const res = await axios(`${import.meta.env.VITE_BASE_URL}/count`);
+            const res = await axios(`${import.meta.env.VITE_BASE_URL}/count?search=${search}`);
             return res.data;
         },
         initialData: {},
@@ -28,6 +31,7 @@ const Home = () => {
         <div>
             <div className="flex w-[83%] mx-auto items-center justify-center bg-white rounded-lg overflow-hidden pl-4 shadow-md h-10">
                 <input
+                    onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search Products by Name"
                     id="input"
                     className="w-full h-full border-none outline-none text-sm caret-orange-600"
