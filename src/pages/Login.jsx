@@ -1,14 +1,26 @@
 import SocialLogin from "@/components/SocialLogin";
+import useAuth from "@/hooks/useAuth";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+    const { signIn } = useAuth();
+    const navigate = useNavigate();
     const handleLogin = async (e) => {
         e.preventDefault();
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password);
+        signIn(email, password)
+            .then((res) => {
+                console.log(res.user);
+                if (res.user) {
+                    navigate("/");
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
     return (
         <div className="container mx-auto min-h-screen flex items-center">
