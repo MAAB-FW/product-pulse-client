@@ -1,14 +1,15 @@
-import { Button } from "./components/ui/button"
+import { Outlet } from "react-router-dom";
+import Navbar from "./components/Navbar";
 
 function App() {
     return (
-        <>
-            <div className="text-center">
-                <h2 className="text-2xl">This is Template Project</h2>
-                <Button className="mx-5">Hello</Button>
+        <div>
+            <Navbar />
+            <div className="container">
+                <Outlet></Outlet>
             </div>
-        </>
-    )
+        </div>
+    );
 }
 
-export default App
+export default App;
