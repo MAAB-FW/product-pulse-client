@@ -1,8 +1,16 @@
 import Card from "@/components/Card";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import React from "react";
 
 const Home = () => {
-    const a = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const { data: products } = useQuery({
+        queryKey: ["products"],
+        queryFn: async () => {
+            const res = await axios(`${import.meta.env.VITE_BASE_URL}/products`);
+            return res.data;
+        },
+    });
     return (
         <div>
             <div className="flex w-[83%] mx-auto items-center justify-center bg-white rounded-lg overflow-hidden pl-4 shadow-md h-10">
@@ -20,7 +28,7 @@ const Home = () => {
                 </label>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-12">
-                {a.map((product) => (
+                {products?.map((product) => (
                     <Card key={product.image} product={product}></Card>
                 ))}
             </div>
