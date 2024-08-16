@@ -14,30 +14,34 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Loading from "@/components/Loading";
 
 const Home = () => {
     const [sort, setSort] = React.useState("");
     const [bn, setBn] = React.useState("");
     const [cate, setCate] = React.useState("");
+    const [price, setPrice] = useState(0);
+    const [tooltipStyle, setTooltipStyle] = useState({ left: "50%", opacity: 0 });
+
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const itemPerPage = 9;
-    const { data: products } = useQuery({
-        queryKey: ["products", currentPage, search, sort, bn, cate],
+    const { data: products, isFetching: l1 } = useQuery({
+        queryKey: ["products", currentPage, search, sort, bn, cate, price],
         queryFn: async () => {
             const res = await axios(
                 `${
                     import.meta.env.VITE_BASE_URL
-                }/products?size=${itemPerPage}&page=${currentPage}&search=${search}&sort=${sort}&brandName=${bn}&categoryName=${cate}`,
+                }/products?size=${itemPerPage}&page=${currentPage}&search=${search}&sort=${sort}&brandName=${bn}&categoryName=${cate}&price=${price}`,
             );
             return res.data;
         },
     });
-    const { data } = useQuery({
-        queryKey: ["count", search, bn, cate],
+    const { data, isFetching: l2 } = useQuery({
+        queryKey: ["count", search, bn, cate, price],
         queryFn: async () => {
             const res = await axios(
-                `${import.meta.env.VITE_BASE_URL}/count?search=${search}&brandName=${bn}&categoryName=${cate}`,
+                `${import.meta.env.VITE_BASE_URL}/count?search=${search}&brandName=${bn}&categoryName=${cate}&price=${price}`,
             );
             return res.data;
         },
@@ -71,24 +75,26 @@ const Home = () => {
                     </svg>
                 </label>
             </div>
-            <div className="my-12 flex items-center justify-between flex-col sm:flex-row gap-3 *:max-w-96">
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline">Sort By</Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                        <DropdownMenuLabel>Price</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuRadioGroup value={sort} onValueChange={setSort}>
-                            <DropdownMenuRadioItem value="Low to High">Low to High</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="High to Low">High to Low</DropdownMenuRadioItem>
-                            <DropdownMenuLabel>Date Added</DropdownMenuLabel>
+            <div className="my-12 flex items-center justify-between flex-col sm:flex-row gap-3 container *:max-w-96">
+                <div className="flex-1">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline">Sort By</Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                            <DropdownMenuLabel>Price</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuRadioItem value="Newest First">Newest First</DropdownMenuRadioItem>
-                        </DropdownMenuRadioGroup>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <div className="flex justify-center flex-col sm:flex-row gap-3 *:max-w-96">
+                            <DropdownMenuRadioGroup value={sort} onValueChange={setSort}>
+                                <DropdownMenuRadioItem value="Low to High">Low to High</DropdownMenuRadioItem>
+                                <DropdownMenuRadioItem value="High to Low">High to Low</DropdownMenuRadioItem>
+                                <DropdownMenuLabel>Date Added</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuRadioItem value="Newest First">Newest First</DropdownMenuRadioItem>
+                            </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+                <div className="flex-1 flex items-center justify-end flex-col sm:flex-row gap-3 *:max-w-96">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button className={bn && "bg-[#1e40af] text-white"} variant="outline">
@@ -121,10 +127,56 @@ const Home = () => {
                             </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <Button>Price Range</Button>
+                    <div title={price} className="flex flex-col md:flex-row items-center gap-2">
+                        <p className="text-nowrap">Price Range:</p>
+                        <div className="relative flex items-center gap-2">
+                            $0
+                            <input
+                                type="range"
+                                value={price}
+                                min="0"
+                                max="2000"
+                                onChange={(e) => {
+                                    const newValue = e.target.value;
+                                    setPrice(newValue);
+
+                                    const rangeWidth = e.target.offsetWidth;
+                                    const tooltipWidth = 40; // Approximate width of the tooltip
+                                    const max = e.target.max;
+                                    const min = e.target.min;
+                                    const percent = (newValue - min) / (max - min);
+                                    const offset = percent * (rangeWidth - tooltipWidth);
+
+                                    setTooltipStyle({ left: `${offset}px`, opacity: 1 });
+                                }}
+                                onFocus={() => setTooltipStyle({ ...tooltipStyle, opacity: 1 })}
+                                onBlur={() => setTooltipStyle({ ...tooltipStyle, opacity: 0 })}
+                            />
+                            $2000
+                            <div
+                                className="absolute left-1/2 transform -translate-x-1/2 -top-8 bg-gray-800 text-white text-xs rounded py-1 px-2 pointer-events-none transition-opacity duration-200"
+                                style={tooltipStyle}
+                            >
+                                {price}
+                            </div>
+                        </div>
+                        {/* <div className="flex items-center gap-2">
+                            
+                            <input
+                                type="range"
+                                onChange={(e) => setPrice(e.target.value)}
+                                value={price}
+                                min={0}
+                                max={2000}
+                            />
+                            
+                        </div> */}
+                    </div>
                 </div>
             </div>
-            {products?.length > 0 ? (
+            {l1 || l2 ? (
+                <Loading />
+            ) : products?.length > 0 ? (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-5 ">
                         {products?.map((product) => (
