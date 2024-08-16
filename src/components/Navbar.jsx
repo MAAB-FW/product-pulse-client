@@ -24,7 +24,7 @@ const Navbar = () => {
     const uls = (
         <>
             {navLinks.map(({ name, path }) => (
-                <NavLink to={path} key={path} className={`${""} text-nowrap`}>
+                <NavLink to={path} key={path} className={`text-nowrap`}>
                     {name}
                 </NavLink>
             ))}
