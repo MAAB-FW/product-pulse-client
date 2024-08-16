@@ -3,21 +3,32 @@ import Pagination from "@/components/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Home = () => {
+    const [sort, setSort] = React.useState("");
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const itemPerPage = 9;
 
     const { data: products } = useQuery({
-        queryKey: ["products", currentPage, search],
+        queryKey: ["products", currentPage, search, sort],
         queryFn: async () => {
             const res = await axios(
-                `${import.meta.env.VITE_BASE_URL}/products?size=${itemPerPage}&page=${currentPage}&search=${search}`,
+                `${import.meta.env.VITE_BASE_URL}/products?size=${itemPerPage}&page=${currentPage}&search=${search}&sort=${sort}`,
             );
             return res.data;
         },
-    });
+    });console.log(sort);
     const { data } = useQuery({
         queryKey: ["count", currentPage, search],
         queryFn: async () => {
@@ -44,7 +55,25 @@ const Home = () => {
                     </svg>
                 </label>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-12">
+            <div className="my-12">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline">Sort By</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>Price</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuRadioGroup value={sort} onValueChange={setSort}>
+                            <DropdownMenuRadioItem value="Low to High">Low to High</DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="High to Low">High to Low</DropdownMenuRadioItem>
+                            <DropdownMenuLabel>Date Added</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuRadioItem value="Newest First">Newest First</DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-5">
                 {products?.map((product) => (
                     <Card key={product.image} product={product}></Card>
                 ))}
