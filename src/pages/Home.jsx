@@ -16,6 +16,8 @@ import {
 
 const Home = () => {
     const [sort, setSort] = React.useState("");
+    const [bn, setBn] = React.useState("");
+    const [cate, setCate] = React.useState("");
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const itemPerPage = 9;
@@ -28,7 +30,7 @@ const Home = () => {
             );
             return res.data;
         },
-    });console.log(sort);
+    });
     const { data } = useQuery({
         queryKey: ["count", currentPage, search],
         queryFn: async () => {
@@ -37,7 +39,17 @@ const Home = () => {
         },
         initialData: {},
     });
+    const { data: categorization } = useQuery({
+        queryKey: ["categorization", currentPage, search],
+        queryFn: async () => {
+            const res = await axios(`${import.meta.env.VITE_BASE_URL}/categorization`);
+            return res.data;
+        },
+        initialData: {},
+    });
     const { count } = data;
+    const { brandNames, categories } = categorization;
+
     return (
         <div>
             <div className="flex w-[83%] mx-auto items-center justify-center bg-white rounded-lg overflow-hidden pl-4 shadow-md h-10">
@@ -55,7 +67,7 @@ const Home = () => {
                     </svg>
                 </label>
             </div>
-            <div className="my-12">
+            <div className="my-12 flex items-center justify-between flex-col sm:flex-row gap-3 *:max-w-96">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline">Sort By</Button>
@@ -72,8 +84,43 @@ const Home = () => {
                         </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
+                <div className="flex justify-center flex-col sm:flex-row gap-3 *:max-w-96">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button className={bn && "bg-[#1e40af] text-white"} variant="outline">
+                                Brand
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="max-w-56 h-56 overflow-scroll">
+                            <DropdownMenuRadioGroup value={bn} onValueChange={setBn}>
+                                {brandNames?.map(({ brand }) => (
+                                    <DropdownMenuRadioItem key={brand} value={brand}>
+                                        {brand}
+                                    </DropdownMenuRadioItem>
+                                ))}
+                            </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button className={cate && "bg-[#1e40af] text-white"} variant="outline">
+                                Category
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="max-w-56 h-56 overflow-scroll">
+                            <DropdownMenuRadioGroup value={cate} onValueChange={setCate}>
+                                {categories?.map(({ category }) => (
+                                    <DropdownMenuRadioItem key={category} value={category}>
+                                        {category}
+                                    </DropdownMenuRadioItem>
+                                ))}
+                            </DropdownMenuRadioGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button>Price Range</Button>
+                </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-5 ">
                 {products?.map((product) => (
                     <Card key={product.image} product={product}></Card>
                 ))}

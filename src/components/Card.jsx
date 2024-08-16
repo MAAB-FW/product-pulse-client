@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const Card = ({ product }) => {
     const { name, image, description, price, category, ratings, createdAt } = product;
     return (
-        <div className="card max-w-sm bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="card max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
             <div className="relative w-full h-56 overflow-hidden">
                 <img src={image} alt={`${name} Image`} className=" w-full h-full object-cover" />
             </div>
