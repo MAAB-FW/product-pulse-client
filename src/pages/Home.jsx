@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -21,20 +22,23 @@ const Home = () => {
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const itemPerPage = 9;
-
     const { data: products } = useQuery({
-        queryKey: ["products", currentPage, search, sort],
+        queryKey: ["products", currentPage, search, sort, bn, cate],
         queryFn: async () => {
             const res = await axios(
-                `${import.meta.env.VITE_BASE_URL}/products?size=${itemPerPage}&page=${currentPage}&search=${search}&sort=${sort}`,
+                `${
+                    import.meta.env.VITE_BASE_URL
+                }/products?size=${itemPerPage}&page=${currentPage}&search=${search}&sort=${sort}&brandName=${bn}&categoryName=${cate}`,
             );
             return res.data;
         },
     });
     const { data } = useQuery({
-        queryKey: ["count", currentPage, search],
+        queryKey: ["count", search, bn, cate],
         queryFn: async () => {
-            const res = await axios(`${import.meta.env.VITE_BASE_URL}/count?search=${search}`);
+            const res = await axios(
+                `${import.meta.env.VITE_BASE_URL}/count?search=${search}&brandName=${bn}&categoryName=${cate}`,
+            );
             return res.data;
         },
         initialData: {},
@@ -120,17 +124,23 @@ const Home = () => {
                     <Button>Price Range</Button>
                 </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-5 ">
-                {products?.map((product) => (
-                    <Card key={product.image} product={product}></Card>
-                ))}
-            </div>
-            <Pagination
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                count={count}
-                itemPerPage={itemPerPage}
-            ></Pagination>
+            {products?.length > 0 ? (
+                <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-5 ">
+                        {products?.map((product) => (
+                            <Card key={product.image} product={product}></Card>
+                        ))}
+                    </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        count={count}
+                        itemPerPage={itemPerPage}
+                    ></Pagination>
+                </>
+            ) : (
+                <div className="flex items-center justify-center">Empty Result</div>
+            )}
         </div>
     );
 };
