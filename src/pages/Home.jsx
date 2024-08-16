@@ -79,12 +79,20 @@ const Home = () => {
                 <div className="flex-1">
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline">Sort By</Button>
+                            <Button variant="outline">{sort ? sort : "Sort By"}</Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-56">
                             <DropdownMenuLabel>Price</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuRadioGroup value={sort} onValueChange={setSort}>
+                            <DropdownMenuRadioGroup
+                                value={sort}
+                                onValueChange={(e) => {
+                                    if (e === sort) {
+                                        return setSort("");
+                                    }
+                                    setSort(e);
+                                }}
+                            >
                                 <DropdownMenuRadioItem value="Low to High">Low to High</DropdownMenuRadioItem>
                                 <DropdownMenuRadioItem value="High to Low">High to Low</DropdownMenuRadioItem>
                                 <DropdownMenuLabel>Date Added</DropdownMenuLabel>
@@ -98,11 +106,19 @@ const Home = () => {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button className={bn && "bg-[#1e40af] text-white"} variant="outline">
-                                Brand
+                                {bn ? bn : "Brand"}
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="max-w-56 h-56 overflow-scroll">
-                            <DropdownMenuRadioGroup value={bn} onValueChange={setBn}>
+                            <DropdownMenuRadioGroup
+                                value={bn}
+                                onValueChange={(e) => {
+                                    if (e === bn) {
+                                        return setBn("");
+                                    }
+                                    setBn(e);
+                                }}
+                            >
                                 {brandNames?.map(({ brand }) => (
                                     <DropdownMenuRadioItem key={brand} value={brand}>
                                         {brand}
@@ -114,11 +130,19 @@ const Home = () => {
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button className={cate && "bg-[#1e40af] text-white"} variant="outline">
-                                Category
+                                {cate ? cate : "Category"}
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="max-w-56 h-56 overflow-scroll">
-                            <DropdownMenuRadioGroup value={cate} onValueChange={setCate}>
+                            <DropdownMenuRadioGroup
+                                value={cate}
+                                onValueChange={(e) => {
+                                    if (e === cate) {
+                                        return setCate("");
+                                    }
+                                    setCate(e);
+                                }}
+                            >
                                 {categories?.map(({ category }) => (
                                     <DropdownMenuRadioItem key={category} value={category}>
                                         {category}
@@ -135,7 +159,7 @@ const Home = () => {
                                 type="range"
                                 value={price}
                                 min="0"
-                                max="2000"
+                                max="1500"
                                 onChange={(e) => {
                                     const newValue = e.target.value;
                                     setPrice(newValue);
@@ -152,7 +176,7 @@ const Home = () => {
                                 onFocus={() => setTooltipStyle({ ...tooltipStyle, opacity: 1 })}
                                 onBlur={() => setTooltipStyle({ ...tooltipStyle, opacity: 0 })}
                             />
-                            $2000
+                            $1500
                             <div
                                 className="absolute left-1/2 transform -translate-x-1/2 -top-8 bg-gray-800 text-white text-xs rounded py-1 px-2 pointer-events-none transition-opacity duration-200"
                                 style={tooltipStyle}
