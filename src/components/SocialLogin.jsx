@@ -1,5 +1,6 @@
 import useAuth from "@/hooks/useAuth";
 import React from "react";
+import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 
@@ -10,9 +11,13 @@ const SocialLogin = () => {
         googleLogin()
             .then((res) => {
                 console.log(res.user);
-                if (res.user) return navigate("/");
+                if (res.user) {
+                    toast.success("Logged in successfully!");
+                    return navigate("/");
+                }
             })
             .catch((error) => {
+                toast.error("Something went wrong!");
                 console.log(error);
             });
     };

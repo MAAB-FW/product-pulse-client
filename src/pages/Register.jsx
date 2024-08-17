@@ -1,6 +1,7 @@
 import SocialLogin from "@/components/SocialLogin";
 import useAuth from "@/hooks/useAuth";
 import React from "react";
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -26,6 +27,7 @@ const Register = () => {
                 if (res.user) {
                     updateUser(name, photo)
                         .then(() => {
+                            toast.success("Register and Logged in successfully!");
                             navigate("/");
                         })
                         .catch((err) => {
@@ -34,6 +36,7 @@ const Register = () => {
                 }
             })
             .catch((error) => {
+                toast.error("Something went wrong!");
                 console.log(error);
             });
     };
