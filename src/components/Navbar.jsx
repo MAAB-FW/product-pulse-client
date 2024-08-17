@@ -35,7 +35,7 @@ const Navbar = () => {
         </>
     );
     return (
-        <div className="bg-[#1e40af] mb-10 w-full text-white relative">
+        <div className="bg-[#1e40af] mb-10 w-full text-white py-2 md:py-0 relative">
             <div className="flex items-center justify-between container mx-auto ">
                 <div className="flex items-center justify-center gap-3">
                     <img alt="logo" src={"/logo.png"} className="size-9 md:size-[61px]" />
@@ -47,7 +47,7 @@ const Navbar = () => {
                 <div onClick={() => setMenu(!menu)} className="inline md:hidden cursor-pointer">
                     <div>{!menu ? <TfiMenu className="size-6" /> : <RxCross2 className="size-6" />}</div>
                     {menu && (
-                        <ul className="md:hidden flex flex-col right-0 absolute *:px-5 *:py-5 text-lg font-semibold bg-[#1e40af] shadow-md rounded-b">
+                        <ul className="md:hidden flex flex-col right-0 absolute *:px-3 *:py-3 text-lg font-semibold bg-[#1e40af] shadow-md rounded-b">
                             {uls}
                         </ul>
                     )}
