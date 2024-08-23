@@ -32,7 +32,7 @@ const Home = () => {
             const res = await axios(
                 `${
                     import.meta.env.VITE_BASE_URL
-                }/products?size=${itemPerPage}&page=${currentPage}&search=${search}&sort=${sort}&brandName=${bn}&categoryName=${cate}&price=${price}`,
+                }/products?size=${itemPerPage}&page=${currentPage}&search=${search}&sort=${sort}&brandName=${bn}&categoryName=${cate}&price=${price}`
             );
             return res.data;
         },
@@ -41,7 +41,7 @@ const Home = () => {
         queryKey: ["count", search, bn, cate, price],
         queryFn: async () => {
             const res = await axios(
-                `${import.meta.env.VITE_BASE_URL}/count?search=${search}&brandName=${bn}&categoryName=${cate}&price=${price}`,
+                `${import.meta.env.VITE_BASE_URL}/count?search=${search}&brandName=${bn}&categoryName=${cate}&price=${price}`
             );
             return res.data;
         },
@@ -204,7 +204,7 @@ const Home = () => {
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-5 ">
                         {products?.map((product) => (
-                            <Card key={product.image} product={product}></Card>
+                            <Card key={product._id} product={product}></Card>
                         ))}
                     </div>
                     <Pagination
